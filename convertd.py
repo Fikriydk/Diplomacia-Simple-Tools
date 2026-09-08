@@ -18,8 +18,8 @@ Information tools:
 """
 countIntro = """
 [ SELECT ROUTE AUTO ]
-1. Money to Premium
-2. Balance to Premium
+1. A Month Premium
+2. 6 Month Premium
 """
 class infoData():
 	priceAdm = None
@@ -39,8 +39,26 @@ class infoData():
 			return (viewM)
 		else:
 			print("You must input all require data")
+class premData():
+	durMin = 11
 
+	def __init__ (self, priceAmonth, price6month, balAmonth, bal6month, perHit):
+		self.pAmonth = priceAmonth
+		self.p6month = price6month
+		self.bAmonth = balAmonth
+		self.b6month = bal6month
+		self.Ahit = perHit
 
+	def monthPrem (self):
+		if self.p6month and self.b6month is None:
+			dayGross = (1440/premData.durMin) * self.Ahit
+			dcPrice = dayGross - self.pAmonth
+			dcBalance = dayGross - self.bAmonth
+			dcpMonthly = dcPrice * 30
+			dcbMonthly = dcBalance * 30
+			viewProfit = f"""Daily price profit : {dcPrice:,.0f}, balance profit : {dcBalance:,.0f}
+Monthly price profit : {dcpMonthly:,.0f}, balance profit : {dcbMonthly:,.0f}""".replace(',','.')
+			return (viewProfit)
 
 print(intro)
 infoData.priceAdm = float(input("Input number of balance avg for 1dm in markets: "))
@@ -67,7 +85,16 @@ elif inputOption == 3:
 	inputOptionCount = int(input("Type your selection"))
 
 	if inputOptionCount == 1:
-		print("1-")
+		poneMonth = float(input("Input market price for premium: "))
+		boneMonth = float(input("Input market balance for premium: "))
+		oneHit = float(input("Input balance you get for one hit: "))
+		psixMonth = None
+		bsixMonth = None
+
+		monthlyPrem = premData(poneMonth, psixMonth, boneMonth, bsixMonth, oneHit)
+		profmPrem = monthlyPrem.monthPrem()
+		print(profmPrem)
+
 	elif inputOptionCount == 2:
 		print("2-")
 	else:
