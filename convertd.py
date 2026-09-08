@@ -1,5 +1,6 @@
 inputOption = None
 inputOptionCount = None
+priceAdm = None
 intro = """
 Before we start, please input this data first...
 """
@@ -22,7 +23,6 @@ countIntro = """
 2. 6 Month Premium
 """
 class infoData():
-	priceAdm = None
 
 	def __init__ (self, inputDM, inputM):
 		self.diamond = inputDM
@@ -30,11 +30,11 @@ class infoData():
 
 	def convertData (self):
 		if self.millions is None:
-			resultDM = self.diamond * infoData.priceAdm
+			resultDM = self.diamond * priceAdm
 			viewDM = f"{resultDM:,.0f}".replace(',','.')
 			return (viewDM)
 		elif self.diamond is None:
-			resultM = self.millions / infoData.priceAdm
+			resultM = self.millions / priceAdm
 			viewM = f"{resultM:,.0f}".replace(',','.')
 			return (viewM)
 		else:
@@ -50,18 +50,20 @@ class premData():
 		self.Ahit = perHit
 
 	def monthPrem (self):
-		if self.p6month and self.b6month is None:
+		if self.p6month is None and self.b6month is None:
 			dayGross = (1440/premData.durMin) * self.Ahit
-			dcPrice = dayGross - self.pAmonth
-			dcBalance = dayGross - self.bAmonth
+			dcBalance = dayGross - (self.bAmonth/30)
+			dcPrice = (dcBalance / 1000000) * 1400 #buat variabel untuk harga mata uang-nya
 			dcpMonthly = dcPrice * 30
-			dcbMonthly = dcBalance * 30
-			viewProfit = f"""Daily price profit : {dcPrice:,.0f}, balance profit : {dcBalance:,.0f}
-Monthly price profit : {dcpMonthly:,.0f}, balance profit : {dcbMonthly:,.0f}""".replace(',','.')
+			dcbMonthly = (dayGross * 30) - self.bAmonth
+			viewProfit = f"""Daily price profit : Rp {dcPrice:,.0f}
+balance profit : $ {dcBalance:,.0f}
+Monthly price profit : Rp {dcpMonthly:,.0f}
+Monthly balance profit : $ {dcbMonthly:,.0f}""".replace(',','.')
 			return (viewProfit)
 
 print(intro)
-infoData.priceAdm = float(input("Input number of balance avg for 1dm in markets: "))
+priceAdm = float(input("Input number of balance avg for 1dm in markets: "))
 
 print(mainMenu)
 inputOption = int(input("Type your selection: "))
@@ -82,7 +84,7 @@ elif inputOption == 2:
 
 elif inputOption == 3:
 	print(countIntro)
-	inputOptionCount = int(input("Type your selection"))
+	inputOptionCount = int(input("Type your selection: "))
 
 	if inputOptionCount == 1:
 		poneMonth = float(input("Input market price for premium: "))
